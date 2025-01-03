@@ -30,13 +30,17 @@ for (j in which(fifa$Position == '')) {
 #REPLACING NUMERICAL MISSING VALUES
 for(i in c(8,9, 14:50))
 {
-  fifa[is.na(fifa[,i]), i] <-mean(fifa[,i], na.rm = TRUE)
+  m <- mean(fifa[,i], na.rm = TRUE)
+  fifa[is.na(fifa[,i]), i] <-m
+  fifa[[i]] = lapply(fifa[[i]], function(x){replace(x,x==0,m)})
+  fifa[[i]] = unlist(lapply(fifa[[i]], as.numeric))
 }
 for(i in c(3,5,6,13))
 {
-  if(i!=12){
-    fifa[is.na(fifa[,i]), i] <-as.integer(mean(fifa[,i], na.rm = TRUE))
-  }
+  m=as.integer(mean(fifa[,i], na.rm = TRUE))
+  fifa[is.na(fifa[,i]), i] <-m
+  fifa[[i]] = lapply(fifa[[i]], function(x){replace(x,x==0,m)})
+  fifa[[i]] = unlist(lapply(fifa[[i]], as.numeric))
 }
 #CHECK IF THERE IS ANY MISSING VALUES
 print(any(is.na(fifa)))
